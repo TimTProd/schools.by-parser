@@ -39,6 +39,7 @@
     py -m pip install bs4
     py -m pip install rich
     ```
+8. чтобы запустить пишем `python3 main.py`
 <!-- end of the list -->
 ## Конфигурация файла четверть.txt
 - 1 строка: год начала четверти
