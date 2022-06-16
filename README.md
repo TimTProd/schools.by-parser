@@ -1,12 +1,14 @@
 # schools.by-parser
 Этот скрипт на питоне парсит отметки с schools.by и выводит их в виде таблицы
 
+- [Как сделать что бы всё работало](##-как-сделать-что-бы-всё-работало)
+
 ## Authors
 
 - [TimTProd](https://github.com/TImTProd)
 
 
-## Как сделать шобы работало
+## Как сделать что бы всё работало
 - изначально у вас должен быть установлен python
 1. Cкопируйте репозиторий: `git clone https://github.com/TImTProd/schools.by-parser.git`
 2. Зайдите в папку репозитория: `cd schools.by-parser`
