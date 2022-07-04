@@ -18,8 +18,8 @@
 - на Windows: `py -m pip install --user virtualenv`
 - на UNIX/macOS: `python3 -m pip install --user virtualenv`
 4. Создаем окружение:
-- на Windows: `py -m venv venv`
-- на UNIX/macOS: `python3 -m venv venv`
+- на Windows: `py -m venv env`
+- на UNIX/macOS: `python3 -m venv env`
 5. Активируем окружение:
 - на Windows: `.\env\Scripts\activate`
 - на UNIX/macOS: `source env/bin/activate`
