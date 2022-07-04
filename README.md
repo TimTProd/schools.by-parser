@@ -35,9 +35,9 @@
     ```
 - на UNIX/macOS: `python3 -m pip install -r requirements.txt` **или** *(если не работает прошлое)*:
     ```
-    py -m pip install mechanize
-    py -m pip install bs4
-    py -m pip install rich
+    python3 -m pip install mechanize
+    python3 -m pip install bs4
+    python3 -m pip install rich
     ```
 8. чтобы запустить пишем `python3 main.py`, если это UNIX/macOS, и если это Windows, то пишем `py main.py`
 <!-- end of the list -->
