@@ -68,8 +68,6 @@ with console.status("[bold red]In process...") as status:
     br.form["username"] = login  # логин
     br.form["password"] = password  # пароль
     br.submit()  # отправка
-    if br == '<Browser visiting https://gymn31.schools.by/pupil/2189609>':
-        print('Правильный пароль введи уебан!!!!')
     """ ПАРСЕР """
 
     # месяцы
@@ -88,7 +86,7 @@ with console.status("[bold red]In process...") as status:
         y = str(monthq)
         if len(y) == 1:
             y = '0' + y
-        br.open(f"https://gymn31.schools.by/pupil/{userID}/dnevnik/quarter/{quarter}/week/{yearq}-{y}-{x}")
+        br.open(f"https://ТУТ ГИМНАЗИЮ ВВЕСТИ КАК В ССЫЛКЕ.schools.by/pupil/{userID}/dnevnik/quarter/{quarter}/week/{yearq}-{y}-{x}")
 
 
     openurl()
