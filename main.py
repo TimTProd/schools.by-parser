@@ -48,6 +48,19 @@ with console.status("[bold red]In process...") as status:
     userID = filel[4].strip()
     login = filel[5].strip()
     password = filel[6].strip()
+    yearqp = int(filel[8].strip())
+    monthqp = int(filel[9].strip())
+    dayqp = int(filel[10].strip())
+    quarterp = int(filel[11].strip())
+
+    pastLessons = []
+    it = 12
+    t = filel[it].strip()
+    while t != "0":
+        it += 1
+        pastLessons.append(t)
+        t = filel[it].strip()
+
     file.close()
     # импорт печенек
     # import http.cookiejar
@@ -68,8 +81,6 @@ with console.status("[bold red]In process...") as status:
     br.form["username"] = login  # логин
     br.form["password"] = password  # пароль
     br.submit()  # отправка
-    if br == '<Browser visiting https://gymn31.schools.by/pupil/2189609>':
-        print('Правильный пароль введи уебан!!!!')
     """ ПАРСЕР """
 
     # месяцы
@@ -81,17 +92,18 @@ with console.status("[bold red]In process...") as status:
     day = datetime.now().day
 
 
-    def openurl():
-        x = str(dayq)
+    def openurl(d, m, yr, q):
+        x = str(d)
         if len(x) == 1:
             x = '0' + x
-        y = str(monthq)
+        y = str(m)
         if len(y) == 1:
             y = '0' + y
-        br.open(f"https://ТУТ ПИСАТЬ ГИМНАЗИЮ.schools.by/pupil/{userID}/dnevnik/quarter/{quarter}/week/{yearq}-{y}-{x}")
+        br.open(
+            f"https://gymn31.schools.by/pupil/{userID}/dnevnik/quarter/{q}/week/{yr}-{y}-{x}")
 
 
-    openurl()
+    openurl(dayqp, monthqp, yearqp, quarterp)
     # br.factory.encoding = 'utf8_encoding'
 
     Русяз = []
@@ -116,7 +128,7 @@ with console.status("[bold red]In process...") as status:
     console.log('[chartreuse3]Collecting marks...')
 
 
-    def readweekmarks():
+    def readweekmarks(ispast):
         b = 0
         remove_digits = str.maketrans('', '', '1234567890.')
         bsoup = BeautifulSoup(br.response(), 'html5lib', from_encoding="utf8")
@@ -132,39 +144,56 @@ with console.status("[bold red]In process...") as status:
                         b = mark.text.strip()
                     if len(b) != 0:
                         if 'Русяз' in a:
-                            Русяз.append(b)
+                            if not ispast or ('Русяз' in pastLessons):
+                                Русяз.append(b)
                         elif 'Руслит' in a:
-                            Руслит.append(b)
+                            if not ispast or ('Руслит' in pastLessons):
+                                Руслит.append(b)
                         elif 'Физкизд' in a:
-                            Физкизд.append(b)
+                            if not ispast or ('Физкизд' in pastLessons):
+                                Физкизд.append(b)
                         elif 'Матем' in a:
-                            Матем.append(b)
+                            if not ispast or ('Матем' in pastLessons):
+                                Матем.append(b)
                         elif 'Англяз' in a:
-                            Англяз.append(b)
+                            if not ispast or ('Англяз' in pastLessons):
+                                Англяз.append(b)
                         elif 'Трудобуч' in a:
-                            Трудобуч.append(b)
+                            if not ispast or ('Трудобуч' in pastLessons):
+                                Трудобуч.append(b)
                         elif 'Искусство' in a:
-                            Искусство.append(b)
+                            if not ispast or ('Искусство' in pastLessons):
+                                Искусство.append(b)
                         elif 'Биология' in a:
-                            Биология.append(b)
+                            if not ispast or ('Биология' in pastLessons):
+                                Биология.append(b)
                         elif 'Всемирист' in a:
-                            Всемирист.append(b)
+                            if not ispast or ('Всемирист' in pastLessons):
+                                Всемирист.append(b)
                         elif 'География' in a:
-                            География.append(b)
+                            if not ispast or ('География' in pastLessons):
+                                География.append(b)
                         elif 'Химия' in a:
-                            Химия.append(b)
+                            if not ispast or ('Химия' in pastLessons):
+                                Химия.append(b)
                         elif 'Физика' in a:
-                            Физика.append(b)
+                            if not ispast or ('Физика' in pastLessons):
+                                Физика.append(b)
                         elif 'Беляз' in a:
-                            Беляз.append(b)
+                            if not ispast or ('Беляз' in pastLessons):
+                                Беляз.append(b)
                         elif 'Беллит' in a:
-                            Беллит.append(b)
+                            if not ispast or ('Беллит' in pastLessons):
+                                Беллит.append(b)
                         elif 'ИстБел' in a:
-                            ИстБел.append(b)
+                            if not ispast or ('ИстБел' in pastLessons):
+                                ИстБел.append(b)
                         elif 'Информ' in a:
-                            Информ.append(b)
+                            if not ispast or ('Информ' in pastLessons):
+                                Информ.append(b)
                         elif 'Обществов' in a:
-                            Обществов.append(b)
+                            if not ispast or ('Обществов' in pastLessons):
+                                Обществов.append(b)
                         else:
                             ЧЗС.append(b)
 
@@ -172,9 +201,22 @@ with console.status("[bold red]In process...") as status:
     while True:
         # noinspection PyBroadException
         try:
+            if dayqp <= monthlength.get(int(monthqp)):
+                openurl(dayqp, monthqp, yearqp, quarterp)
+                readweekmarks(True)
+                dayqp += 7
+            else:
+                dayqp = (dayqp - monthlength.get(int(monthqp)))
+                monthqp += 1
+        except:
+            break
+
+    while True:
+        # noinspection PyBroadException
+        try:
             if dayq <= monthlength.get(int(monthq)):
-                openurl()
-                readweekmarks()
+                openurl(dayq, monthq, yearq, quarter)
+                readweekmarks(False)
                 dayq += 7
             else:
                 dayq = (dayq - monthlength.get(int(monthq)))
