@@ -1,4 +1,4 @@
-# created by TimTProd(github) on 2021 - 2022
+# created by TimTProd(GitHub) on 2021 - 2022
 """
 Парсер отметок с сайта schools.by
 =================================================
@@ -68,6 +68,8 @@ with console.status("[bold red]In process...") as status:
     br.form["username"] = login  # логин
     br.form["password"] = password  # пароль
     br.submit()  # отправка
+    if br == '<Browser visiting https://gymn31.schools.by/pupil/2189609>':
+        print('Правильный пароль введи уебан!!!!')
     """ ПАРСЕР """
 
     # месяцы
@@ -86,7 +88,7 @@ with console.status("[bold red]In process...") as status:
         y = str(monthq)
         if len(y) == 1:
             y = '0' + y
-        br.open(f"https://ТУТ ГИМНАЗИЮ ВВЕСТИ КАК В ССЫЛКЕ.schools.by/pupil/{userID}/dnevnik/quarter/{quarter}/week/{yearq}-{y}-{x}")
+        br.open(f"https://ТУТ ПИСАТЬ ГИМНАЗИЮ.schools.by/pupil/{userID}/dnevnik/quarter/{quarter}/week/{yearq}-{y}-{x}")
 
 
     openurl()
@@ -108,6 +110,7 @@ with console.status("[bold red]In process...") as status:
     Беллит = []
     ИстБел = []
     Информ = []
+    Обществов = []
     ЧЗС = []
 
     console.log('[chartreuse3]Collecting marks...')
@@ -160,11 +163,14 @@ with console.status("[bold red]In process...") as status:
                             ИстБел.append(b)
                         elif 'Информ' in a:
                             Информ.append(b)
+                        elif 'Обществов' in a:
+                            Обществов.append(b)
                         else:
                             ЧЗС.append(b)
 
 
     while True:
+        # noinspection PyBroadException
         try:
             if dayq <= monthlength.get(int(monthq)):
                 openurl()
@@ -211,28 +217,74 @@ with console.status("[bold red]In process...") as status:
         return a
 
 
+    def isfloat(value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
+
+    def count_min(x, y):
+        if x == '':
+            return ''
+        elif isfloat(x):
+            if x - int(x) == 0.5:
+                return round(1 + int(x))
+            else:
+                mark = x
+                sumt = mark * y + 11
+                out = 11
+                while round(mark) <= round(sumt / (y + 1)):
+                    out -= 1
+                    sumt = mark * y + out
+                return out + 1
+        else:
+            mark = x
+            sumt = mark * y + 11
+            out = 11
+            while round(mark) <= round(sumt / (y + 1)):
+                out -= 1
+                sumt = mark * y + out
+            return out + 1
+
+
     table = Table(row_styles=['on grey19', ''])
     table.add_column('Урок', justify='left', style='cyan', no_wrap=True)
     table.add_column('Средняя(окр.)', style='bold bright_red')
     table.add_column('Отметки', style='green', justify='left')
+    table.add_column('Мин. Отм.', style='green')
     table.add_column('Средняя', style='white')
 
-    table.add_row('Русяз', str(vav(av(Русяз))), listext(Русяз), str(av(Русяз)))
-    table.add_row('Руслит', str(vav(av(Руслит))), listext(Руслит), str(av(Руслит)))
-    table.add_row('Физкизд ', str(vav(av(Физкизд))), listext(Физкизд), str(av(Физкизд)))
-    table.add_row('Матем', str(vav(av(Матем))), listext(Матем), str(av(Матем)))
-    table.add_row('Англяз', str(vav(av(Англяз))), listext(Англяз), str(av(Англяз)))
-    table.add_row('Трудобуч', str(vav(av(Трудобуч))), listext(Трудобуч), str(av(Трудобуч)))
+    table.add_row('Русяз', str(vav(av(Русяз))), listext(Русяз), str(count_min(av(Русяз), len(Русяз))), str(av(Русяз)))
+    table.add_row('Руслит', str(vav(av(Руслит))), listext(Руслит), str(count_min(av(Руслит), len(Руслит))),
+                  str(av(Руслит)))
+    table.add_row('Физкизд ', str(vav(av(Физкизд))), listext(Физкизд), str(count_min(av(Физкизд), len(Физкизд))),
+                  str(av(Физкизд)))
+    table.add_row('Матем', str(vav(av(Матем))), listext(Матем), str(count_min(av(Матем), len(Матем))), str(av(Матем)))
+    table.add_row('Англяз', str(vav(av(Англяз))), listext(Англяз), str(count_min(av(Англяз), len(Англяз))),
+                  str(av(Англяз)))
+    table.add_row('Трудобуч', str(vav(av(Трудобуч))), listext(Трудобуч), str(count_min(av(Трудобуч), len(Трудобуч))),
+                  str(av(Трудобуч)))
     table.add_row('Искусство', '', listext(Искусство))
-    table.add_row('Биология', str(vav(av(Биология))), listext(Биология), str(av(Биология)))
-    table.add_row('Всемирист', str(vav(av(Всемирист))), listext(Всемирист), str(av(Всемирист)))
-    table.add_row('География', str(vav(av(География))), listext(География), str(av(География)))
-    table.add_row('Химия', str(vav(av(Химия))), listext(Химия), str(av(Химия)))
-    table.add_row('Физика', str(vav(av(Физика))), listext(Физика), str(av(Физика)))
-    table.add_row('Беляз', str(vav(av(Беляз))), listext(Беляз), str(av(Беляз)))
-    table.add_row('Беллит', str(vav(av(Беллит))), listext(Беллит), str(av(Беллит)))
-    table.add_row('ИстБел', str(vav(av(ИстБел))), listext(ИстБел), str(av(ИстБел)))
-    table.add_row('Информ', str(vav(av(Информ))), listext(Информ), str(av(Информ)))
-    table.add_row('ЧЗС', str(vav(av(ЧЗС))), listext(ЧЗС), str(av(ЧЗС)))
+    table.add_row('Биология', str(vav(av(Биология))), listext(Биология), str(count_min(av(Биология), len(Биология))),
+                  str(av(Биология)))
+    table.add_row('Всемирист', str(vav(av(Всемирист))), listext(Всемирист),
+                  str(count_min(av(Всемирист), len(Всемирист))), str(av(Всемирист)))
+    table.add_row('География', str(vav(av(География))), listext(География),
+                  str(count_min(av(География), len(География))), str(av(География)))
+    table.add_row('Химия', str(vav(av(Химия))), listext(Химия), str(count_min(av(Химия), len(Химия))), str(av(Химия)))
+    table.add_row('Физика', str(vav(av(Физика))), listext(Физика), str(count_min(av(Физика), len(Физика))),
+                  str(av(Физика)))
+    table.add_row('Беляз', str(vav(av(Беляз))), listext(Беляз), str(count_min(av(Беляз), len(Беляз))), str(av(Беляз)))
+    table.add_row('Беллит', str(vav(av(Беллит))), listext(Беллит), str(count_min(av(Беллит), len(Беллит))),
+                  str(av(Беллит)))
+    table.add_row('ИстБел', str(vav(av(ИстБел))), listext(ИстБел), str(count_min(av(ИстБел), len(ИстБел))),
+                  str(av(ИстБел)))
+    table.add_row('Информ', str(vav(av(Информ))), listext(Информ), str(count_min(av(Информ), len(Информ))),
+                  str(av(Информ)))
+    table.add_row('Обществов', str(vav(av(Обществов))), listext(Обществов),
+                  str(count_min(av(Обществов), len(Обществов))), str(av(Обществов)))
+    table.add_row('ЧЗС', str(vav(av(ЧЗС))), listext(ЧЗС), str(count_min(av(ЧЗС), len(ЧЗС))), str(av(ЧЗС)))
     console.log('[chartreuse3]Done!')
 console.print(table)
